@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daniels Ernährungsstrategie</title>
+    <style>
+        :root {
+            --primary: #10b981; /* Grün für Gesundheit/Essen */
+            --primary-dark: #059669;
+            --bg: #f0fdf4;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #d1fae5;
+            --accent: #f59e0b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding-bottom: 80px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 { font-size: 1.8rem; margin-bottom: 0.5rem; font-weight: 700; }
+        .subtitle { font-size: 0.95rem; opacity: 0.9; max-width: 600px; margin: 0 auto; }
+
+        .nav-container {
+            position: sticky;
+            top: 0;
+            background: var(--card-bg);
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 0.5rem 0;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            min-width: 100%;
+            padding: 0 1rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 0.75rem 1rem;
+            margin: 0 0.25rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-light);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+        }
+
+        .tab-btn:hover:not(.active) {
+            background-color: var(--bg);
+            color: var(--primary);
+        }
+
+        .content-section {
+            display: none;
+            padding: 1.5rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .content-section.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .card h3 {
+            color: var(--primary-dark);
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .highlight-box {
+            background: #ecfdf5;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .highlight-box strong { color: var(--primary-dark); }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .calc-item {
+            background: #f0fdf4;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .calc-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+        }
+
+        .calc-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .food-list {
+            list-style: none;
+        }
+
+        .food-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .food-list li:last-child { border-bottom: none; }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .tag-protein { background: #dbeafe; color: #1e40af; }
+        .tag-carbs { background: #fef3c7; color: #92400e; }
+        .tag-fat { background: #fce7f3; color: #9d174d; }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 600px) {
+            .calc-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Daniels Ernährungsstrategie</h1>
+    <div class="subtitle">Wissenschaftsbasierter Plan für Muskelaufbau & Hypertrophie</div>
+</header>
+
+<div class="nav-container">
+    <div class="nav-tabs" id="tabs">
+        <!-- Buttons per JS -->
+    </div>
+</div>
+
+<main id="content">
+    <!-- Inhalte per JS -->
+</main>
+
+<footer>
+    <p>Erstellt von Lumo für Daniel | 18. April 2026</p>
+    <p style="margin-top:0.5rem; font-size: 0.8rem;">Ernährung ist 70% des Erfolgs. Bleib konsistent!</p>
+</footer>
+
+<script>
+    const sections = [
+        {
+            id: "basics",
+            title: "Die Grundlagen",
+            icon: "📊",
+            content: `
+                <div class="card">
+                    <h3><span>🎯</span> Dein Ziel: Leichte Hypertrophie</h3>
+                    <p>Nach deinem erfolgreichen Gewichtsverlust (115kg → 77kg) bist du in einer perfekten Position für "Body Recomposition" oder leichten Aufbau. Dein BMI von 24,6 erlaubt einen moderaten Kalorienüberschuss ohne übermäßige Fettzunahme.</p>
+                    <div class="highlight-box">
+                        <strong>Die Regel:</strong> Um Muskeln aufzubauen, muss mehr Energie zugeführt werden als verbraucht wird. Aber: Zu viel Überschuss führt zu Fett, zu wenig zu keinem Wachstum.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span>⚡</span> Deine Kalorienberechnung (Schätzung)</h3>
+                    <p>Basiert auf: 48 Jahre, 177cm, 77kg, 6 Tage Training/Woche.</p>
+                    
+                    <div class="calc-grid">
+                        <div class="calc-item">
+                            <span class="calc-value">~1.850</span>
+                            <span class="calc-label">Grundumsatz (BMR)</span>
+                        </div>
+                        <div class="calc-item">
+                            <span class="calc-value">~2.600</span>
+                            <span class="calc-label">Gesamtverbrauch (TDEE)</span>
+                        </div>
+                        <div class="calc-item" style="grid-column: span 2; background: #dcfce7; border-color: #86efac;">
+                            <span class="calc-value" style="color: #166534;">~2.350</span>
+                            <span class="calc-label">Zielkalorien (Lean Bulk)</span>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--text-light);">*Hinweis: Dies ist eine Schätzung. Wiege dich 2x pro Woche (morgens nüchtern) und passe die Kalorien an, wenn sich das Gewicht nicht um ca. 0,25–0,5 kg pro Woche erhöht.</p>
+                </div>
+            `
+        },
+        {
+            id: "macros",
+            title: "Makronährstoffe",
+            icon: "🍽️",
+            content: `
+                <div class="card">
+                    <h3><span>🥩</span> Protein: Der Baustein</h3>
+                    <p>Kritisch für die Muskelproteinsynthese (MPS). Ohne genug Protein bringt das härteste Training nichts.</p>
+                    <div class="highlight-box">
+                        <strong>Ziel:</strong> 1,8 – 2,2 g pro kg Körpergewicht.<br>
+                        <strong>Dein Ziel:</strong> <strong>140g – 170g Protein täglich.</strong>
+                    </div>
+                    <p>Verteile dies auf 4–5 Mahlzeiten (je ca. 30–40g), um die MPS ständig zu stimulieren.</p>
+                </div>
+
+                <div class="card">
+                    <h3><span>🍞</span> Kohlenhydrate: Der Treibstoff</h3>
+                    <p>Essentiell für intensive Trainingseinheiten (Glykogenspeicher). Da du 6 Tage trainierst, brauchst du ausreichend Carbs.</p>
+                    <div class="highlight-box">
+                        <strong>Ziel:</strong> Ca. 3–4 g pro kg KG.<br>
+                        <strong>Dein Ziel:</strong> <strong>230g – 300g Kohlenhydrate.</strong>
+                    </div>
+                    <p>Fokus auf komplexe Quellen (Haferflocken, Reis, Kartoffeln, Vollkorn) rund um das Training.</p>
+                </div>
+
+                <div class="card">
+                    <h3><span>🥑</span> Fette: Hormonelle Balance</h3>
+                    <p>Wichtig für Testosteronproduktion und allgemeine Gesundheit. Nicht zu niedrig halten.</p>
+                    <div class="highlight-box">
+                        <strong>Ziel:</strong> Ca. 0,8 – 1,0 g pro kg KG.<br>
+                        <strong>Dein Ziel:</strong> <strong>65g – 80g Fette.</strong>
+                    </div>
+                    <p>Priorisiere ungesättigte Fette (Nüsse, Olivenöl, Avocado, Fisch).</p>
+                </div>
+            `
+        },
+        {
+            id: "timing",
+            title: "Timing & Strategie",
+            icon: "⏱️",
+            content: `
+                <div class="card">
+                    <h3><span>🕒</span> Das perfekte Timing</h3>
+                    <p>Während die Gesamtmenge an Kalorien am wichtigsten ist, kann das Timing die Leistung und Erholung optimieren.</p>
+                    
+                    <ul class="food-list">
+                        <li>
+                            <span><strong>Vor dem Training (1–2h vorher)</strong></span>
+                            <span class="tag tag-carbs">Carbs + Protein</span>
+                        </li>
+                        <li>
+                            <span><strong>Während des Trainings</strong></span>
+                            <span class="tag tag-protein">Wasser + Elektrolyte</span>
+                        </li>
+                        <li>
+                            <span><strong>Nach dem Training (innerhalb 2h)</strong></span>
+                            <span class="tag tag-protein">Protein + Carbs</span>
+                        </li>
+                    </ul>
+                    <div class="highlight-box" style="margin-top:1rem;">
+                        <strong>Strategie:</strong> Iss deine größte Kohlenhydrat-Mahlzeit <em>nach</em> dem Training, um die Glykogenspeicher schnell wieder aufzufüllen und die Insulinantwort zu nutzen.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span>💧</span> Hydration</h3>
+                    <p>Muskeln bestehen zu ~75% aus Wasser. Dehydrierung senkt die Kraftleistung massiv.</p>
+                    <p><strong>Ziel:</strong> Mindestens 3–3,5 Liter Wasser täglich. Bei intensivem Training mehr.</p>
+                </div>
+            `
+        },
+        {
+            id: "foods",
+            title: "Lebensmittel-Liste",
+            icon: "🛒",
+            content: `
+                <div class="card">
+                    <h3><span>✅</span> Empfohlene Lebensmittel</h3>
+                    <p>Einfach zuzubereiten, nährstoffdicht und günstig.</p>
+                    
+                    <h4 style="margin-top:1rem; color:var(--primary-dark);">Proteinquellen</h4>
+                    <ul class="food-list">
+                        <li><span>Hähnchenbrust / Pute</span> <span class="tag tag-protein">Sehr hoch</span></li>
+                        <li><span>Magerquark / Skyr</span> <span class="tag tag-protein">Hoch + Casein</span></li>
+                        <li><span>Eier (ganze Eier)</span> <span class="tag tag-protein">Hoch + Fette</span></li>
+                        <li><span>Lachs / Thunfisch</span> <span class="tag tag-protein">Omega-3</span></li>
+                        <li><span>Tofu / Tempeh / Linsen</span> <span class="tag tag-protein">Pflanzlich</span></li>
+                    </ul>
+
+                    <h4 style="margin-top:1rem; color:var(--primary-dark);">Kohlenhydratquellen</h4>
+                    <ul class="food-list">
+                        <li><span>Reis (Basmati/Natron)</span> <span class="tag tag-carbs">Energie</span></li>
+                        <li><span>Haflocken (Zart)</span> <span class="tag tag-carbs">Ballaststoffe</span></li>
+                        <li><span>Kartoffeln / Süßkartoffeln</span> <span class="tag tag-carbs">Vitaminreich</span></li>
+                        <li><span>Vollkornnudeln</span> <span class="tag tag-carbs">Sättigend</span></li>
+                        <li><span>Obst (Banane, Beeren)</span> <span class="tag tag-carbs">Schnelle Energie</span></li>
+                    </ul>
+
+                    <h4 style="margin-top:1rem; color:var(--primary-dark);">Fettquellen</h4>
+                    <ul class="food-list">
+                        <li><span>Nüsse (Walnüsse, Mandeln)</span> <span class="tag tag-fat">Mikronährstoffe</span></li>
+                        <li><span>Olivenöl / Leinöl</span> <span class="tag tag-fat">Gesunde Fette</span></li>
+                        <li><span>Avocado</span> <span class="tag tag-fat">Kalorienreich</span></li>
+                        <li><span>Eigelb</span> <span class="tag tag-fat">Cholesterin</span></li>
+                    </ul>
+                </div>
+            `
+        },
+        {
+            id: "supps",
+            title: "Supplements",
+            icon: "💊",
+            content: `
+                <div class="card">
+                    <h3><span>💊</span> Sinnvolle Supplements</h3>
+                    <p>Supplements sind nur die "Kirsche auf der Torte". Sie ersetzen keine richtige Ernährung.</p>
+                    
+                    <div class="highlight-box">
+                        <strong>1. Kreatin Monohydrat (Empfohlen)</strong><br>
+                        Das am besten erforschte Supplement. Erhöht Kraft, Muskelvolumen (durch Wassereinlagerung in der Zelle) und kognitive Leistung.<br>
+                        <em>Dosis:</em> 3–5g täglich, jeden Tag (auch ruhetag). Keine Ladephase nötig.
+                    </div>
+
+                    <div class="highlight-box">
+                        <strong>2. Whey Protein (Optional)</strong><br>
+                        Nur praktisch, wenn du dein Proteinziel schwer erreichst. Kein Muss, wenn du genug Fleisch/Fisch/Quark isst.<br>
+                        <em>Dosis:</em> 1 Scoop nach dem Training oder als Snack.
+                    </div>
+
+                    <div class="highlight-box">
+                        <strong>3. Vitamin D3 + K2</strong><br>
+                        Besonders in Deutschland/Europa oft mangelhaft. Wichtig für Testosteron und Knochengesundheit.<br>
+                        <em>Dosis:</em> Nach Blutwert oder prophylaktisch 2000–4000 IE.
+                    </div>
+
+                    <p style="margin-top:1rem; font-size:0.9rem;"><strong>Ignorieren:</strong> BCAAs (unnötig, wenn genug Protein), Fatburner, Testosteron-Booster (meist wirkungslos).</p>
+                </div>
+            `
+        }
+    ];
+
+    const navContainer = document.getElementById('tabs');
+    const contentContainer = document.getElementById('content');
+
+    sections.forEach((section, index) => {
+        // Tab Button
+        const btn = document.createElement('button');
+        btn.className = `tab-btn ${index === 0 ? 'active' : ''}`;
+        btn.textContent = section.title;
+        btn.onclick = () => switchTab(index);
+        navContainer.appendChild(btn);
+
+        // Content Section
+        const sec = document.createElement('div');
+        sec.className = `content-section ${index === 0 ? 'active' : ''}`;
+        sec.id = `sec-${index}`;
+        sec.innerHTML = `
+            <h2 class="section-title">${section.icon} ${section.title}</h2>
+            ${section.content}
+        `;
+        contentContainer.appendChild(sec);
+    });
+
+    function switchTab(index) {
+        document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+            btn.classList.toggle('active', i === index);
+        });
+        document.querySelectorAll('.content-section').forEach((sec, i) => {
+            sec.classList.toggle('active', i === index);
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
