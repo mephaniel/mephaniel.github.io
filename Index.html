@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daniels Hypertrophie Plan</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding-bottom: 80px; /* Platz für mobile Navigation */
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Navigation Tabs */
+        .nav-container {
+            position: sticky;
+            top: 0;
+            background: var(--card-bg);
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            padding: 0.5rem 0;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            min-width: 100%;
+            padding: 0 1rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 0.75rem 1rem;
+            margin: 0 0.25rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-light);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3);
+        }
+
+        .tab-btn:hover:not(.active) {
+            background-color: var(--bg);
+            color: var(--primary);
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            padding: 1.5rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .day-title {
+            font-size: 1.4rem;
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        /* Exercise Cards */
+        .exercise-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .exercise-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .sets-reps {
+            background: #eff6ff;
+            color: var(--primary-dark);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .muscle-group {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            font-style: italic;
+        }
+
+        .instructions {
+            font-size: 0.95rem;
+            color: var(--text);
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .instructions strong {
+            color: var(--primary-dark);
+        }
+
+        /* Tips Section */
+        .tips-section {
+            background: #fffbeb;
+            border: 1px solid #fcd34d;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .tips-section h3 {
+            color: #b45309;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .tips-list {
+            list-style: none;
+        }
+
+        .tips-list li {
+            margin-bottom: 0.75rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .tips-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.5rem; }
+            .exercise-header { flex-direction: column; gap: 0.5rem; }
+            .sets-reps { align-self: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Daniels Hypertrophie Plan</h1>
+    <div class="subtitle">6-Tage Split • Push / Pull / Legs • Fokus auf Masse & Optik</div>
+</header>
+
+<!-- Navigation -->
+<div class="nav-container">
+    <div class="nav-tabs" id="tabs">
+        <!-- Buttons werden per JS generiert -->
+    </div>
+</div>
+
+<main id="content">
+    <!-- Inhalte werden per JS generiert -->
+</main>
+
+<footer>
+    <p>Erstellt von Lumo für Daniel | 18. April 2026</p>
+    <p style="margin-top:0.5rem; font-size: 0.8rem;">Denke an Progression: Steigere Gewicht oder Wiederholungen jede Woche!</p>
+</footer>
+
+<script>
+    const planData = [
+        {
+            day: "Mo",
+            title: "Push A (Brust & Trizeps)",
+            focus: "Maximale mechanische Spannung",
+            exercises: [
+                {
+                    name: "Bankdrücken (Langhantel)",
+                    sets: "3 x 6–8",
+                    muscle: "Brust, vordere Schulter, Trizeps",
+                    desc: "<strong>Ausführung:</strong> Schulterblätter zusammenziehen und in die Bank drücken. Stange kontrolliert zur unteren Brustmitte senken. Explosiv nach oben drücken, Ellbogen nicht komplett durchstrecken. Füße fest am Boden."
+                },
+                {
+                    name: "Schrägbankdrücken (Kurzhanteln)",
+                    sets: "3 x 8–10",
+                    muscle: "Obere Brust, vordere Schulter",
+                    desc: "<strong>Ausführung:</strong> Bank auf 30–45°. Kurzhanteln von Schulterhöhe nach oben drücken, oben fast berühren. Langsam senken für Dehnung. Ellbogen ca. 45° zum Körper."
+                },
+                {
+                    name: "Seitheben (Kurzhanteln)",
+                    sets: "3 x 12–15",
+                    muscle: "Seitliche Schulter (Breite)",
+                    desc: "<strong>Ausführung:</strong> Arme leicht gebeugt. Seitlich heben bis Schulterhöhe. Stell dir vor, du schüttest Wasser aus (Daumen leicht unten). Kein Schwung aus dem Oberkörper."
+                },
+                {
+                    name: "Trizeps-Drücken (Kabelzug)",
+                    sets: "3 x 10–12",
+                    muscle: "Trizeps",
+                    desc: "<strong>Ausführung:</strong> Oberarme senkrecht am Körper fixieren. Nach unten drücken bis Arme gestreckt sind. Kurz halten und kontrolliert zurückführen."
+                },
+                {
+                    name: "Dips (an der Bank)",
+                    sets: "3 x bis Versagen",
+                    muscle: "Untere Brust, Trizeps",
+                    desc: "<strong>Ausführung:</strong> Hände auf Bank/Stützen. Körper leicht nach vorne neigen für Brustfokus. Tief absenken (bis Schulterhöhe), dann hochdrücken."
+                }
+            ]
+        },
+        {
+            day: "Di",
+            title: "Pull A (Rücken & Bizeps)",
+            focus: "Rückenbreite und Dicke",
+            exercises: [
+                {
+                    name: "Klimmzüge (oder Latzug)",
+                    sets: "3 x 6–10",
+                    muscle: "Latissimus (Breite)",
+                    desc: "<strong>Ausführung:</strong> Griff etwas breiter als schulterbreit. Aktiv hochziehen bis Kinn die Stange berührt. Ellbogen nach unten/hinten ziehen, nicht nur Arme beugen."
+                },
+                {
+                    name: "Rudern (Langhantel vorgebeugt)",
+                    sets: "3 x 8–10",
+                    muscle: "Mittlerer Rücken, Rhomboiden",
+                    desc: "<strong>Ausführung:</strong> Oberkörper 45–60° geneigt, Rücken gerade! Stange zum unteren Bauchnabel ziehen. Ellbogen nah am Körper. Nicht den Rücken runden."
+                },
+                {
+                    name: "Einarmiges Kurzhantel-Rudern",
+                    sets: "3 x 10–12 (pro Seite)",
+                    muscle: "Latissimus, tiefe Rückenmuskulatur",
+                    desc: "<strong>Ausführung:</strong> Eine Hand/Knie auf Bank abstützen. Rücken gerade. KH zur Hüfte ziehen, Ellenbogen eng. Spüre die Dehnung beim Absenken."
+                },
+                {
+                    name: "Face Pulls (Kabelzug)",
+                    sets: "3 x 15–20",
+                    muscle: "Hintere Schulter, Rotatorenmanschette",
+                    desc: "<strong>Ausführung:</strong> Seil in Kopfhöhe. Zur Stirn ziehen, Arme nach außen öffnen (Y/T Form). Schultern aktiv zurückziehen."
+                },
+                {
+                    name: "Curls (SZ-Stange)",
+                    sets: "3 x 10–12",
+                    muscle: "Bizeps",
+                    desc: "<strong>Ausführung:</strong> Stehend, Oberarme senkrecht. Stange zur Brust ziehen. Kein Schwung aus der Hüfte. Langsam senken (3 Sek)."
+                }
+            ]
+        },
+        {
+            day: "Mi",
+            title: "Legs A (Quadrizeps Fokus)",
+            focus: "Beinfront & Kniestabilität",
+            exercises: [
+                {
+                    name: "Kniebeugen (Langhantel)",
+                    sets: "3 x 6–8",
+                    muscle: "Quadrizeps, Gesäß, Core",
+                    desc: "<strong>Ausführung:</strong> Stange auf oberem Rücken. Füße schulterbreit, Zehen leicht außen. Tief gehen (parallel oder tiefer). Rücken gerade. Durch Fersen hochdrücken."
+                },
+                {
+                    name: "Ausfallschritte (Gehend)",
+                    sets: "3 x 10–12 (pro Bein)",
+                    muscle: "Quadrizeps, Gesäß",
+                    desc: "<strong>Ausführung:</strong> Kurzhanteln in Händen. Großer Schritt nach vorne. Hintere Knie fast zum Boden. Oberkörper aufrecht. Durch vordere Ferse zurückdrücken."
+                },
+                {
+                    name: "Bulgarische Split Squat",
+                    sets: "3 x 10–12 (pro Bein)",
+                    muscle: "Quadrizeps, Gesäß",
+                    desc: "<strong>Ausführung:</strong> Ein Fuß auf Bank hinter dir. Mit dem anderen Bein in die Knie gehen. Oberkörper je nach Fokus leicht nach vorne oder aufrecht."
+                },
+                {
+                    name: "Wadenheben stehend",
+                    sets: "4 x 15–20",
+                    muscle: "Gastrocnemius (Wade)",
+                    desc: "<strong>Ausführung:</strong> Auf Stufe stehen. Kurzhanteln halten. Fersen maximal heben, kurz halten, langsam bis zur Dehnung senken."
+                },
+                {
+                    name: "Einbeinige RDL (KH)",
+                    sets: "3 x 10–12 (pro Bein)",
+                    muscle: "Hamstrings, Gesäß",
+                    desc: "<strong>Ausführung:</strong> Auf einem Bein stehen, KH in Gegenhand. Hüftgelenk beugen, hinteres Bein nach hinten schieben. Dehnung im hinteren Oberschenkel spüren."
+                }
+            ]
+        },
+        {
+            day: "Do",
+            title: "Push B (Schulter & Trizeps)",
+            focus: "Schulterbreite & Trizeps-Volumen",
+            exercises: [
+                {
+                    name: "Schulterdrücken (Sitzend)",
+                    sets: "3 x 8–10",
+                    muscle: "Vordere/Mittlere Schulter",
+                    desc: "<strong>Ausführung:</strong> Auf Bank sitzen (aufrecht). Gewichte von Schulterhöhe nach oben drücken. Hohlkreuz vermeiden."
+                },
+                {
+                    name: "Liegestütze (Variation)",
+                    sets: "3 x bis Versagen",
+                    muscle: "Brust, Trizeps, Core",
+                    desc: "<strong>Ausführung:</strong> Klassisch oder Füße erhöht. Bei zu leichter Belastung: Gewichte auf Rücken oder KH als Griff nutzen."
+                },
+                {
+                    name: "Seitheben am Kabelzug",
+                    sets: "3 x 12–15",
+                    muscle: "Seitliche Schulter",
+                    desc: "<strong>Ausführung:</strong> Seitlich zum Kabelzug. Seil unter dem Arm durch. Arm seitlich heben. Vorteil: Konstante Spannung."
+                },
+                {
+                    name: "Trizeps-Extensions (Über Kopf)",
+                    sets: "3 x 10–12",
+                    muscle: "Langer Kopf Trizeps",
+                    desc: "<strong>Ausführung:</strong> Stehend/Sitzend. KH oder Seil über Kopf halten. Ellbogen beugen (Last hinter Kopf), dann strecken."
+                },
+                {
+                    name: "Fliegende (Pec Fly KH)",
+                    sets: "3 x 12–15",
+                    muscle: "Brust (Isolation)",
+                    desc: "<strong>Ausführung:</strong> Liegend auf Bank. Arme leicht gebeugt. Weit öffnen (Dehnung), dann zusammenführen (Umarmung). Nicht zu schwer."
+                }
+            ]
+        },
+        {
+            day: "Fr",
+            title: "Pull B (Rücken Dicke & Bizeps)",
+            focus: "Rückenstärke & Bizeps-Peak",
+            exercises: [
+                {
+                    name: "Rumänisches Kreuzheben (RDL)",
+                    sets: "3 x 8–10",
+                    muscle: "Hamstrings, Gesäß, Unterer Rücken",
+                    desc: "<strong>Ausführung:</strong> Beine leicht gebeugt. Hüfte weit nach hinten schieben. Stange an Beinen entlang. Dehnung in Hamstrings spüren. Rückkehr durch Gesäß."
+                },
+                {
+                    name: "Enger Latzug / Klimmzüge",
+                    sets: "3 x 8–10",
+                    muscle: "Unterer Lat, Bizeps",
+                    desc: "<strong>Ausführung:</strong> Enger Untergriff. Zur Brust ziehen. Fokus auf unteren Latissimus."
+                },
+                {
+                    name: "Ruderzug (Kabelzug sitzend)",
+                    sets: "3 x 10–12",
+                    muscle: "Mittlerer Rücken",
+                    desc: "<strong>Ausführung:</strong> Sitzen am Kabelzug. Griff zum Bauchnabel ziehen. Brust raus, Schultern zurück."
+                },
+                {
+                    name: "Hammer-Curls",
+                    sets: "3 x 10–12",
+                    muscle: "Brachialis (Armstärke)",
+                    desc: "<strong>Ausführung:</strong> KH wie Hammer halten (Handflächen zueinander). Wie normaler Curl ausführen."
+                },
+                {
+                    name: "Reverse Flys",
+                    sets: "3 x 15–20",
+                    muscle: "Hintere Schulter",
+                    desc: "<strong>Ausführung:</strong> Vorgebeugt, KH in Händen. Arme seitlich nach hinten heben. Oder am Kabelzug mit Seil."
+                }
+            ]
+        },
+        {
+            day: "Sa",
+            title: "Legs B (Hamstrings & Gesäß)",
+            focus: "Hinterer Oberschenkel & Gesäßform",
+            exercises: [
+                {
+                    name: "Frontkniebeugen (KH oder LB)",
+                    sets: "3 x 8–10",
+                    muscle: "Quadrizeps, Core",
+                    desc: "<strong>Ausführung:</strong> KH an Schultern oder LB vor Brust. Oberkörper sehr aufrecht halten. Tief in die Knie gehen."
+                },
+                {
+                    name: "Glute Bridges",
+                    sets: "3 x 10–12",
+                    muscle: "Gesäß",
+                    desc: "<strong>Ausführung:</strong> Oberer Rücken auf Bank, Füße am Boden. Gewicht auf Hüfte. Hüfte nach oben drücken, Gesäß maximal anspannen."
+                },
+                {
+                    name: "Ausfallschritte rückwärts",
+                    sets: "3 x 10–12 (pro Bein)",
+                    muscle: "Gesäß, Quadrizeps",
+                    desc: "<strong>Ausführung:</strong> Schritt nach hinten statt vorne. Oft besser für Knie, betont Gesäß mehr."
+                },
+                {
+                    name: "Wadenheben sitzend",
+                    sets: "4 x 15–20",
+                    muscle: "Soleus (tiefe Wade)",
+                    desc: "<strong>Ausführung:</strong> Sitzen, KH auf Oberschenkeln (nahe Knie). Fersen heben."
+                },
+                {
+                    name: "Hyperextensions",
+                    sets: "3 x 15–20",
+                    muscle: "Unterer Rücken, Gesäß",
+                    desc: "<strong>Ausführung:</strong> Füße an Sit-Up Bank fixieren. Oberkörper senken/heben. Für Gesäß: Leicht nach vorne neigen."
+                }
+            ]
+        }
+    ];
+
+    const tipsData = {
+        title: "Wichtige Hinweise für deinen Erfolg",
+        points: [
+            "Aufwärmen: 5–10 Min leichtes Cardio + 2–3 Aufwärmsätze pro erster Übung.",
+            "Ernährung: Leichter Kalorienüberschuss (+200–300 kcal) und 1,6–2,0g Protein pro kg Körpergewicht.",
+            "Schlaf: 7–8 Stunden für optimale Regeneration und Muskelwachstum.",
+            "Progression: Versuche jede Woche Gewicht oder Wiederholungen zu steigern.",
+            "Sicherheit: Bei schweren Übungen (Kniebeuge, Bankdrücken) allein sein vorsichtig oder KH nutzen."
+        ]
+    };
+
+    // Render Navigation
+    const navContainer = document.getElementById('tabs');
+    planData.forEach((item, index) => {
+        const btn = document.createElement('button');
+        btn.className = `tab-btn ${index === 0 ? 'active' : ''}`;
+        btn.textContent = item.day;
+        btn.onclick = () => switchTab(index);
+        navContainer.appendChild(btn);
+    });
+
+    // Render Content
+    const contentContainer = document.getElementById('content');
+    
+    // Add Tips Section first
+    const tipsSection = document.createElement('div');
+    tipsSection.className = 'tips-section';
+    tipsSection.innerHTML = `
+        <h3>${tipsData.title}</h3>
+        <ul class="tips-list">
+            ${tipsData.points.map(point => `<li>${point}</li>`).join('')}
+        </ul>
+    `;
+    contentContainer.appendChild(tipsSection);
+
+    // Add Day Sections
+    planData.forEach((item, index) => {
+        const section = document.createElement('div');
+        section.className = `content-section ${index === 0 ? 'active' : ''}`;
+        section.id = `day-${index}`;
+        
+        let exercisesHtml = item.exercises.map(ex => `
+            <div class="exercise-card">
+                <div class="exercise-header">
+                    <div>
+                        <div class="exercise-name">${ex.name}</div>
+                        <div class="muscle-group">${ex.muscle}</div>
+                    </div>
+                    <div class="sets-reps">${ex.sets}</div>
+                </div>
+                <div class="instructions">${ex.desc}</div>
+            </div>
+        `).join('');
+
+        section.innerHTML = `
+            <h2 class="day-title">${item.title}</h2>
+            <p style="margin-bottom: 1rem; color: var(--text-light);"><em>Fokus: ${item.focus}</em></p>
+            ${exercisesHtml}
+        `;
+        contentContainer.appendChild(section);
+    });
+
+    function switchTab(index) {
+        // Update Buttons
+        document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+            btn.classList.toggle('active', i === index);
+        });
+
+        // Update Sections
+        document.querySelectorAll('.content-section').forEach((sec, i) => {
+            sec.classList.toggle('active', i === index);
+        });
+        
+        // Scroll to top of content
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
